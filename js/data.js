@@ -371,7 +371,7 @@ const SCIENCE_DATA = {
   ],
 
   // ===========================================================================
-  // SIMULADOR DE EXAMEN OFICIAL SANTILLANA
+  // SIMULADOR DE EXAMEN
   // ===========================================================================
   exams: {
     // PRUEBA A: Caso práctico contextualizado (Lucas y Valentina en el Humedal)

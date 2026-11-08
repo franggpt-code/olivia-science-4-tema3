@@ -437,7 +437,7 @@ class ScienceApp {
   }
 
   // ===========================================================================
-  // VISTA 3: SIMULADOR DE EXAMEN SANTILLANA (Prueba A y B)
+  // VISTA 3: SIMULADOR DE EXAMEN (Prueba A y B)
   // ===========================================================================
   startExam(examKey) {
     const examData = this.data.exams[examKey];

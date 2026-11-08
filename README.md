@@ -13,7 +13,7 @@ Aplicación web interactiva, pedagógica y lúdica diseñada especialmente para 
    - **Misión 4: Protoctistas, el Doble Mundo Acuático:** Los protozoos unicelulares heterótrofos móviles (amebas y paramecios) vs. las algas fotosintéticas productoras de oxígeno (sin raíz ni tallo verdaderos) y utilidades humanas (alimentación, agar-agar).
    - **Misión 5: Bacterias y Salud Humana:** Organismos exclusivamente unicelulares presentes en todo el planeta. Bacterias aliadas (fermentación del yogur y flora intestinal/microbiota) vs. bacterias patógenas (enfermedades tratadas con antibióticos).
 
-2. **🏆 Simulador de Examen Oficial Santillana:**
+2. **🏆 Simulador de Examen:**
    - **Prueba A: La Gran Expedición al Humedal y el Pinar (Caso Práctico):** 10 preguntas competenciales aplicadas a una excursión en la naturaleza con Lucas y Valentina, utilizando prismáticos para aves, muestras de agua para microscopio, setas bajo los pinos y la merienda con pan y yogur.
    - **Prueba B: Dominio Curricular y Saberes Básicos:** 10 preguntas de máximo rigor conceptual sobre definiciones formales, semejanzas y diferencias exactas entre reinos, celularidad y preguntas trampa de examen.
    - Desglose formativo de respuestas con explicaciones pedagógicas adaptadas a 9-10 años.
