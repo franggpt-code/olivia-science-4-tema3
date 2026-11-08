@@ -1003,7 +1003,7 @@ class ScienceApp {
   }
 
   // ===========================================================================
-  // VISTA 7: CHULETA DE ESTUDIO IMPRIMIBLE
+  // VISTA 7: ESQUEMAS VISUALES IMPRIMIBLES
   // ===========================================================================
   renderSummaryGuide() {
     const container = document.getElementById("summary-container");

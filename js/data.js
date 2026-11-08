@@ -845,7 +845,7 @@ const SCIENCE_DATA = {
   ],
 
   // ===========================================================================
-  // GUÍA RESUMEN PARA IMPRIMIR (CHULETA OFICIAL DE REPASO)
+  // GUÍA RESUMEN PARA IMPRIMIR (ESQUEMAS OFICIALES DE REPASO)
   // ===========================================================================
   summaryGuide: [
     {

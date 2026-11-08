@@ -30,7 +30,7 @@ Aplicación web interactiva, pedagógica y lúdica diseñada especialmente para 
 5. **🧪 Explorador Científico Interactivo:**
    - Panel visual donde Olivia puede explorar en detalle cada uno de los 5 Reinos: celularidad, nutrición, movilidad, hábitat, clave de examen, ejemplos cotidianos y curiosidades asombrosas («¡Ojo al dato!»).
 
-6. **📖 Guía Visual de Repaso (Chuleta Imprimible):**
+6. **📖 Guía Visual de Repaso (Esquemas Imprimibles):**
    - Resumen estructurado en 5 bloques esenciales listo para lectura rápida o impresión en papel antes del examen (`Ctrl + P`).
 
 7. **🎓 Diploma Oficial Imprimible de Olivia:**
@@ -83,7 +83,7 @@ La aplicación está preparada con `vercel.json` para desplegarse automáticamen
 ├── js/
 │   ├── confetti.min.js                  # Motor de partículas de celebración
 │   ├── audio.js                         # Web Audio API y síntesis de voz (Text-to-Speech)
-│   ├── data.js                          # Banco pedagógico (Misiones, Exámenes A/B, Express, Arcade y Chuleta)
+│   ├── data.js                          # Banco pedagógico (Misiones, Exámenes A/B, Express, Arcade y Esquemas)
 │   └── app.js                           # Lógica de la SPA, navegación, puntuación y diploma
 ├── Science_4_Tema3_Claves_Santillana.md # Resumen curricular y base conceptual
 ├── vercel.json                          # Configuración de despliegue y seguridad
