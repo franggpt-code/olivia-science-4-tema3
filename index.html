@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>🔬 Science 4.º Primaria · Tema 3: Los Cinco Reinos | Entrenador de Olivia</title>
+  <meta name="description" content="Aplicación interactiva y pedagógica para preparar el examen del Tema 3 de Science / Conocimiento del Medio de 4º de primaria. Proyecto CLAVES Grazalema-Santillana.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔬</text></svg>">
+
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Hojas de estilo locales -->
+  <link rel="stylesheet" href="css/tailwind.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Canvas Confetti local -->
+  <script src="js/confetti.min.js"></script>
+</head>
+<body class="flex flex-col min-h-screen text-slate-800 antialiased selection:bg-indigo-200">
+
+  <!-- =========================================================================
+       CABECERA PRINCIPAL SÓLIDA Y OPACA (PROTECCIÓN CONTRA SUPERPOSICIÓN)
+       ========================================================================= -->
+  <header class="app-header no-print sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      
+      <!-- Logo y Marca -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="app.navigate('home')">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-teal-600 flex items-center justify-center text-2xl shadow-md text-white">
+          🔬
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-black font-display tracking-tight text-slate-900 leading-none">Science 4.º</h1>
+            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-0.5 rounded-full font-extrabold">TEMA 3</span>
+          </div>
+          <p class="text-xs text-slate-500 font-semibold">Los 5 Reinos · Entrenador de Olivia · Santillana CLAVES</p>
+        </div>
+      </div>
+
+      <!-- Navegación de Escritorio -->
+      <nav class="hidden md:flex items-center gap-1 text-sm font-bold text-slate-600">
+        <button onclick="app.navigate('home')" id="nav-home" class="px-3 py-1.5 rounded-xl hover:text-indigo-700 hover:bg-indigo-50 transition-colors">🏠 Inicio</button>
+        <button onclick="app.navigate('misiones')" id="nav-misiones" class="px-3 py-1.5 rounded-xl hover:text-indigo-700 hover:bg-indigo-50 transition-colors">🎯 Misiones</button>
+        <button onclick="app.navigate('examen')" id="nav-examen" class="px-3 py-1.5 rounded-xl hover:text-indigo-700 hover:bg-indigo-50 transition-colors">🏆 Examen Oficial</button>
+        <button onclick="app.navigate('express')" id="nav-express" class="px-3 py-1.5 rounded-xl hover:text-indigo-700 hover:bg-indigo-50 transition-colors">⚡ Express</button>
+        <button onclick="app.navigate('arcade')" id="nav-arcade" class="px-3 py-1.5 rounded-xl hover:text-indigo-700 hover:bg-indigo-50 transition-colors">🕹️ Arcade</button>
+        <button onclick="app.navigate('laboratorio')" id="nav-laboratorio" class="px-3 py-1.5 rounded-xl hover:text-indigo-700 hover:bg-indigo-50 transition-colors">🧪 Explorador</button>
+        <button onclick="app.navigate('chuleta')" id="nav-chuleta" class="px-3 py-1.5 rounded-xl hover:text-indigo-700 hover:bg-indigo-50 transition-colors">📖 Chuleta</button>
+      </nav>
+
+      <!-- Controles de Audio y Estrellas -->
+      <div class="flex items-center gap-2">
+        <!-- Contador de Estrellas -->
+        <div class="flex items-center gap-1.5 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full text-amber-700 font-black text-sm shadow-xs">
+          <span class="text-base">⭐</span>
+          <span id="star-count">0</span>
+        </div>
+
+        <!-- Botón Voz Lectora -->
+        <button onclick="app.toggleVoice()" id="btn-voice" class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-100 transition-colors" title="Activar/Desactivar lectura en voz alta">
+          🗣️
+        </button>
+
+        <!-- Botón Sonidos -->
+        <button onclick="app.toggleSound()" id="btn-sound" class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-100 transition-colors" title="Activar/Desactivar efectos de sonido">
+          🔊
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Barra de Navegación Móvil Inferior -->
+    <div class="mobile-subnav md:hidden flex overflow-x-auto gap-2 px-4 py-2.5 border-t border-slate-200 bg-slate-50 text-xs font-bold scrollbar-none">
+      <button onclick="app.navigate('home')" class="whitespace-nowrap px-3 py-1 rounded-lg bg-white border border-slate-200 shadow-xs">🏠 Inicio</button>
+      <button onclick="app.navigate('misiones')" class="whitespace-nowrap px-3 py-1 rounded-lg bg-white border border-slate-200 shadow-xs">🎯 Misiones</button>
+      <button onclick="app.navigate('examen')" class="whitespace-nowrap px-3 py-1 rounded-lg bg-white border border-slate-200 shadow-xs">🏆 Examen</button>
+      <button onclick="app.navigate('express')" class="whitespace-nowrap px-3 py-1 rounded-lg bg-white border border-slate-200 shadow-xs">⚡ Express</button>
+      <button onclick="app.navigate('arcade')" class="whitespace-nowrap px-3 py-1 rounded-lg bg-white border border-slate-200 shadow-xs">🕹️ Arcade</button>
+      <button onclick="app.navigate('laboratorio')" class="whitespace-nowrap px-3 py-1 rounded-lg bg-white border border-slate-200 shadow-xs">🧪 Explorador</button>
+      <button onclick="app.navigate('chuleta')" class="whitespace-nowrap px-3 py-1 rounded-lg bg-white border border-slate-200 shadow-xs">📖 Chuleta</button>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       CONTENEDOR DINÁMICO DE VISTAS (SPA)
+       ========================================================================= -->
+  <main class="app-main flex-1 max-w-6xl w-full mx-auto px-4 py-6">
+
+    <!-- ---------------------------------------------------------------------
+         VISTA 1: INICIO (HOME)
+         --------------------------------------------------------------------- -->
+    <section id="view-home" class="space-y-8">
+      
+      <!-- Banner de Bienvenida -->
+      <div class="card-playful p-6 sm:p-8 bg-gradient-to-r from-indigo-700 via-indigo-600 to-teal-700 text-white relative overflow-hidden">
+        <div class="relative z-10 max-w-2xl">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-white/20 text-white backdrop-blur-sm mb-3">
+            🔬 Bienvenido al Laboratorio de Olivia
+          </span>
+          <h2 class="text-2xl sm:text-4xl font-black font-display tracking-tight leading-tight mb-2">
+            Los Seres Vivos y los Cinco Reinos
+          </h2>
+          <p class="text-sm sm:text-base text-indigo-100 font-medium leading-relaxed mb-6">
+            Entrena a fondo para el examen de Ciencias de la Naturaleza (Tema 3). Domina las células, los hongos, las algas, las bacterias y saca tu 10 oficial.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <button onclick="app.navigate('misiones')" class="btn-bounce px-6 py-3 rounded-2xl bg-white text-indigo-900 font-black text-sm shadow-lg hover:bg-indigo-50">
+              Comenzar Misiones 🚀
+            </button>
+            <button onclick="app.navigate('examen')" class="btn-bounce px-6 py-3 rounded-2xl bg-indigo-950/40 border border-white/30 text-white font-black text-sm hover:bg-indigo-950/60">
+              Simular Examen 🏆
+            </button>
+          </div>
+        </div>
+
+        <!-- Decoración de fondo -->
+        <div class="absolute -right-8 -bottom-8 text-9xl opacity-15 select-none pointer-events-none">
+          🔬
+        </div>
+      </div>
+
+      <!-- Tarjeta de Progreso General -->
+      <div class="card-playful p-6 bg-white flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl font-black shrink-0">
+            ⭐
+          </div>
+          <div>
+            <h3 class="font-black text-slate-900 text-base">Progreso de Olivia</h3>
+            <p class="text-xs text-slate-500 font-semibold" id="home-mission-progress">0 de 5 Misiones completadas</p>
+          </div>
+        </div>
+        <div class="w-full sm:w-64 bg-slate-100 rounded-full h-3 overflow-hidden">
+          <div id="home-progress-bar" class="bg-gradient-to-r from-indigo-500 to-teal-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Cuadrícula de Módulos de Aprendizaje -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Módulo 1: Misiones -->
+        <div onclick="app.navigate('misiones')" class="card-playful p-6 cursor-pointer hover:border-indigo-500 group">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            🎯
+          </div>
+          <h3 class="text-lg font-black text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors">5 Misiones Didácticas</h3>
+          <p class="text-xs text-slate-500 leading-relaxed">Paso a paso: células, microscopios, los 5 reinos, hongos, protoctistas y bacterias con explicaciones claras.</p>
+        </div>
+
+        <!-- Módulo 2: Examen Oficial -->
+        <div onclick="app.navigate('examen')" class="card-playful p-6 cursor-pointer hover:border-indigo-500 group">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            🏆
+          </div>
+          <h3 class="text-lg font-black text-slate-900 mb-1 group-hover:text-emerald-600 transition-colors">Examen Oficial Santillana</h3>
+          <p class="text-xs text-slate-500 leading-relaxed">Prueba A (Expedición Práctica en el Humedal) y Prueba B (Control Curricular con preguntas trampa).</p>
+        </div>
+
+        <!-- Módulo 3: Desafío Express -->
+        <div onclick="app.navigate('express')" class="card-playful p-6 cursor-pointer hover:border-indigo-500 group">
+          <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            ⚡
+          </div>
+          <h3 class="text-lg font-black text-slate-900 mb-1 group-hover:text-amber-600 transition-colors">Desafío Express</h3>
+          <p class="text-xs text-slate-500 leading-relaxed">Test rápido infinito con preguntas aleatorias para poner a prueba tus reflejos biológicos y sumar rachas.</p>
+        </div>
+
+        <!-- Módulo 4: Arcade -->
+        <div onclick="app.navigate('arcade')" class="card-playful p-6 cursor-pointer hover:border-indigo-500 group">
+          <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            🕹️
+          </div>
+          <h3 class="text-lg font-black text-slate-900 mb-1 group-hover:text-purple-600 transition-colors">Arcade de los Reinos</h3>
+          <p class="text-xs text-slate-500 leading-relaxed">Juego contrarreloj de 45 segundos para clasificar seres vivos por reino, celularidad y papel para la salud.</p>
+        </div>
+
+        <!-- Módulo 5: Explorador Científico -->
+        <div onclick="app.navigate('laboratorio')" class="card-playful p-6 cursor-pointer hover:border-indigo-500 group">
+          <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            🧪
+          </div>
+          <h3 class="text-lg font-black text-slate-900 mb-1 group-hover:text-teal-600 transition-colors">Explorador de los 5 Reinos</h3>
+          <p class="text-xs text-slate-500 leading-relaxed">Ficha interactiva de cada reino con nutrición, movilidad, secretos para exámenes y datos asombrosos.</p>
+        </div>
+
+        <!-- Módulo 6: Chuleta de Repaso -->
+        <div onclick="app.navigate('chuleta')" class="card-playful p-6 cursor-pointer hover:border-indigo-500 group">
+          <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            📖
+          </div>
+          <h3 class="text-lg font-black text-slate-900 mb-1 group-hover:text-rose-600 transition-colors">Chuleta Imprimible</h3>
+          <p class="text-xs text-slate-500 leading-relaxed">Resumen esquemático y visual perfecto para repasar justo antes del examen o imprimir en papel.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ---------------------------------------------------------------------
+         VISTA 2: MISIONES DIDÁCTICAS
+         --------------------------------------------------------------------- -->
+    <section id="view-misiones" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-black text-slate-900">Misiones Didácticas</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Supera cada misión conceptual para conseguir todas las medallas científicas.</p>
+        </div>
+      </div>
+
+      <!-- Contenedor de listado de misiones -->
+      <div id="missions-list-container" class="space-y-4"></div>
+
+      <!-- Contenedor del cuestionario de la misión activa -->
+      <div id="mission-quiz-container" class="hidden"></div>
+    </section>
+
+    <!-- ---------------------------------------------------------------------
+         VISTA 3: SIMULADOR DE EXAMEN SANTILLANA
+         --------------------------------------------------------------------- -->
+    <section id="view-examen" class="hidden space-y-6">
+      
+      <!-- Selector de Tipo de Examen -->
+      <div id="exam-selector" class="space-y-6">
+        <div>
+          <h2 class="text-2xl font-black text-slate-900">Simulador de Examen Oficial</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Pruebas calibradas exactamente con los estándares del Proyecto CLAVES Grazalema-Santillana.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Tarjeta Examen A -->
+          <div class="card-playful p-6 sm:p-8 border-t-8 border-indigo-600 flex flex-col justify-between">
+            <div>
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-black bg-indigo-100 text-indigo-800 mb-3">
+                PRUEBA A · COMPETENCIAL
+              </span>
+              <h3 class="text-xl font-black text-slate-900 mb-2">La Expedición al Humedal y el Pinar</h3>
+              <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                Acompaña a Lucas y Valentina en su expedición científica. Preguntas competenciales de aplicación práctica con muestras de agua, flamencos, setas del pinar, pan y yogur.
+              </p>
+              <ul class="text-xs text-slate-600 space-y-2 mb-6 font-semibold">
+                <li class="flex items-center gap-2">✅ 10 preguntas de situación real en la naturaleza</li>
+                <li class="flex items-center gap-2">✅ Identificación de instrumentos y reinos</li>
+                <li class="flex items-center gap-2">✅ Explicaciones pedagógicas al corregir</li>
+              </ul>
+            </div>
+            <button onclick="app.startExam('testA')" class="btn-bounce w-full py-3 rounded-2xl font-black text-sm text-white bg-indigo-600 hover:bg-indigo-700 shadow-md">
+              Realizar Prueba A 🌿
+            </button>
+          </div>
+
+          <!-- Tarjeta Examen B -->
+          <div class="card-playful p-6 sm:p-8 border-t-8 border-teal-600 flex flex-col justify-between">
+            <div>
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-black bg-teal-100 text-teal-800 mb-3">
+                PRUEBA B · CONTROL CURRICULAR
+              </span>
+              <h3 class="text-xl font-black text-slate-900 mb-2">Control Oficial de Conceptos Clave</h3>
+              <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                Evaluación formal de definiciones y preguntas trampa: diferencias exactas entre animales y plantas, celularidad de hongos y bacterias, y protoctistas.
+              </p>
+              <ul class="text-xs text-slate-600 space-y-2 mb-6 font-semibold">
+                <li class="flex items-center gap-2">✅ 10 preguntas conceptuales profundas</li>
+                <li class="flex items-center gap-2">✅ Detección de afirmaciones falsas</li>
+                <li class="flex items-center gap-2">✅ Certificado de Honor disponible al aprobar</li>
+              </ul>
+            </div>
+            <button onclick="app.startExam('testB')" class="btn-bounce w-full py-3 rounded-2xl font-black text-sm text-white bg-teal-600 hover:bg-teal-700 shadow-md">
+              Realizar Prueba B 🏆
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Contenedor del Examen en curso -->
+      <div id="exam-active" class="hidden">
+        <div id="exam-question-card" class="card-playful"></div>
+      </div>
+
+      <!-- Contenedor de Resultados del Examen -->
+      <div id="exam-results" class="hidden"></div>
+
+    </section>
+
+    <!-- ---------------------------------------------------------------------
+         VISTA 4: DESAFÍO EXPRESS
+         --------------------------------------------------------------------- -->
+    <section id="view-express" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-black text-slate-900">Desafío Express</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Preguntas relámpago con retroalimentación instantánea. ¡Mantén viva tu racha!</p>
+        </div>
+      </div>
+
+      <div id="express-container" class="max-w-xl mx-auto"></div>
+    </section>
+
+    <!-- ---------------------------------------------------------------------
+         VISTA 5: ARCADE DE CLASIFICACIÓN
+         --------------------------------------------------------------------- -->
+    <section id="view-arcade" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-black text-slate-900">Arcade de los Reinos</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Pon a prueba tu agilidad mental clasificando contrarreloj.</p>
+        </div>
+
+        <!-- Selector de modos -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="app.initArcadeMode('kingdoms')" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-black hover:bg-slate-100">
+            👑 5 Reinos
+          </button>
+          <button onclick="app.initArcadeMode('cellularity')" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-black hover:bg-slate-100">
+            🔬 Celularidad
+          </button>
+          <button onclick="app.initArcadeMode('role')" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-black hover:bg-slate-100">
+            🛡️ Amigo o Peligro
+          </button>
+        </div>
+      </div>
+
+      <div id="arcade-container"></div>
+    </section>
+
+    <!-- ---------------------------------------------------------------------
+         VISTA 6: EXPLORADOR CIENTÍFICO DE LOS 5 REINOS
+         --------------------------------------------------------------------- -->
+    <section id="view-laboratorio" class="hidden space-y-6">
+      <div>
+        <h2 class="text-2xl font-black text-slate-900">Explorador Científico de los 5 Reinos</h2>
+        <p class="text-xs sm:text-sm text-slate-500">Haz clic en cada reino para conocer sus secretos biológicos y datos asombrosos.</p>
+      </div>
+
+      <!-- Pestañas de Reinos -->
+      <div id="explorer-tabs" class="flex flex-wrap gap-2"></div>
+
+      <!-- Contenido dinámico del reino seleccionado -->
+      <div id="explorer-content"></div>
+    </section>
+
+    <!-- ---------------------------------------------------------------------
+         VISTA 7: CHULETA DE ESTUDIO IMPRIMIBLE
+         --------------------------------------------------------------------- -->
+    <section id="view-chuleta" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-black text-slate-900">Chuleta de Estudio · Resumen Visual</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Todo lo imprescindible para sacar un 10 en una sola hoja esquemática.</p>
+        </div>
+        <button onclick="window.print()" class="btn-bounce px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm flex items-center gap-2 shadow-md">
+          🖨️ Imprimir Chuleta (Ctrl+P)
+        </button>
+      </div>
+
+      <!-- Contenedor de bloques resumen -->
+      <div id="summary-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+    </section>
+
+    <!-- ---------------------------------------------------------------------
+         VISTA 8: DIPLOMA OFICIAL DE HONOR
+         --------------------------------------------------------------------- -->
+    <section id="view-diploma" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 no-print">
+        <div>
+          <h2 class="text-2xl font-black text-slate-900">Diploma Oficial de Honor</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Reconocimiento a la excelencia académica en Ciencias de la Naturaleza.</p>
+        </div>
+        <button onclick="app.printDiploma()" class="btn-bounce px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm flex items-center gap-2 shadow-md">
+          🖨️ Imprimir Diploma Oficial
+        </button>
+      </div>
+
+      <!-- Tarjeta del Diploma (optimizada para pantalla e impresión) -->
+      <div class="card-playful p-8 sm:p-12 bg-gradient-to-b from-amber-50/40 via-white to-amber-50/20 border-4 border-amber-300 relative text-center max-w-3xl mx-auto shadow-2xl">
+        
+        <!-- Marco interior decorativo -->
+        <div class="border-2 border-dashed border-amber-400 p-6 sm:p-10 rounded-2xl relative">
+          
+          <div class="text-5xl mb-3">🎓</div>
+          <span class="text-xs font-black uppercase tracking-widest text-amber-700 bg-amber-100 px-4 py-1 rounded-full border border-amber-300">
+            PROYECTO CLAVES · CONSTRUYENDO MUNDOS · SANTILLANA
+          </span>
+
+          <h1 class="text-2xl sm:text-4xl font-black text-slate-900 my-4 font-display uppercase tracking-tight">
+            Diploma de Excelencia Científica
+          </h1>
+
+          <p class="text-xs sm:text-sm text-slate-600 font-medium">Se otorga con orgullo y felicitaciones a:</p>
+          
+          <div class="my-4">
+            <input type="text" id="diploma-student-name" onchange="app.updateStudentName(this.value)" class="text-2xl sm:text-3xl font-black text-indigo-900 text-center border-b-2 border-indigo-400 focus:outline-none focus:border-indigo-600 bg-transparent px-4 py-1" value="Olivia">
+          </div>
+
+          <p class="text-xs sm:text-sm text-slate-700 max-w-lg mx-auto leading-relaxed mb-8">
+            Por haber demostrado un conocimiento sobresaliente en la comprensión de las <strong>células</strong>, los <strong>instrumentos de observación</strong> y la clasificación de los <strong>Cinco Reinos de la Naturaleza</strong> (Animales, Plantas, Hongos, Protoctistas y Bacterias) en 4.º de Primaria.
+          </p>
+
+          <div class="flex items-center justify-between border-t border-amber-200 pt-6 text-xs text-slate-500 font-bold">
+            <div class="text-left">
+              <span>📅 Fecha de Expedición:</span>
+              <p class="text-slate-800 font-black mt-0.5" id="diploma-date"></p>
+            </div>
+            <div class="text-4xl">
+              🏅
+            </div>
+            <div class="text-right">
+              <span>Sello Oficial:</span>
+              <p class="text-indigo-700 font-black mt-0.5">Entrenador Science 4.º</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       PIE DE PÁGINA
+       ========================================================================= -->
+  <footer class="no-print mt-auto bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>🔬 Entrenador Pedagógico para <strong>Olivia</strong> · 4.º de Primaria</p>
+      <p>Colección CLAVES · Grazalema–Santillana · Diseñado para Vercel</p>
+    </div>
+  </footer>
+
+  <!-- Scripts de la Aplicación -->
+  <script src="js/audio.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

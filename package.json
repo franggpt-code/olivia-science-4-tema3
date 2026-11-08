@@ -1,0 +1,26 @@
+{
+  "name": "olivia-science-4-tema3",
+  "version": "1.0.0",
+  "description": "Aplicación web interactiva y pedagógica para preparar el examen del Tema 3 de Science / Conocimiento del Medio (Los seres vivos y los cinco reinos) de 4.º de Primaria (Proyecto CLAVES / Grazalema-Santillana)",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 3000"
+  },
+  "keywords": [
+    "science",
+    "ciencias-naturales",
+    "conocimiento-del-medio",
+    "primaria",
+    "4-primaria",
+    "los-cinco-reinos",
+    "seres-vivos",
+    "celulas",
+    "hongos",
+    "bacterias",
+    "protoctistas",
+    "santillana",
+    "claves"
+  ],
+  "author": "Fran Guerrero",
+  "license": "MIT"
+}

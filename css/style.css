@@ -1,0 +1,215 @@
+/* =============================================================================
+   ESTILOS VISUALES · SCIENCE 4.º DE PRIMARIA · TEMA 3: LOS CINCO REINOS
+   Entrenador interactivo para Olivia · Proyecto CLAVES Santillana
+   ============================================================================= */
+
+:root {
+  --primary: #4f46e5;        /* Índigo científico / microscopio */
+  --primary-dark: #3730a3;
+  --secondary: #0d9488;      /* Verde azulado / biodiversidad */
+  --accent: #d97706;         /* Ámbar energía / curiosidad */
+  --hongo: #b45309;          /* Tono tierra hongos y setas */
+  --bacteria: #7c3aed;       /* Violeta microbiología */
+  --protoctista: #0284c7;    /* Azul acuático algas y protozoos */
+  --success: #10b981;        /* Verde acierto */
+  --danger: #ef4444;         /* Rojo corrección */
+  --text-main: #1e293b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Outfit', 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1e293b;
+  background: #fdfcf7;
+  background: linear-gradient(135deg, #f0fdfa 0%, #eef2ff 45%, #fefce8 100%);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tipografía */
+.font-display { font-family: 'Outfit', -apple-system, sans-serif; letter-spacing: -0.02em; }
+.font-sans { font-family: 'Nunito', -apple-system, sans-serif; }
+
+/* =============================================================================
+   CABECERA FIJA Y SÓLIDA (PROTECCIÓN CONTRA SUPERPOSICIÓN DE CONTENIDO)
+   ============================================================================= */
+header.app-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+  box-shadow: 0 4px 15px -2px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04) !important;
+  width: 100% !important;
+}
+
+.mobile-subnav {
+  background-color: #f8fafc !important;
+  background: #f8fafc !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+main.app-main {
+  position: relative;
+  z-index: 1;
+  padding-top: 1.5rem !important;
+  padding-bottom: 3.5rem !important;
+}
+
+/* Contenedores y Tarjetas */
+.card-playful {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.07), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+  border: 2px solid #e2e8f0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-playful:hover {
+  border-color: #cbd5e1;
+}
+
+/* Botones interactivos con tacto 3D amigable */
+.btn-bounce {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-bounce:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+}
+
+.btn-bounce:active {
+  transform: translateY(1px);
+}
+
+/* Opciones de test interactivo */
+.quiz-option {
+  transition: all 0.2s ease;
+  border: 2px solid #e2e8f0;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.quiz-option:hover {
+  border-color: #6366f1;
+  background-color: #f5f3ff;
+  transform: translateX(4px);
+}
+
+.quiz-option.selected {
+  border-color: #4f46e5;
+  background-color: #e0e7ff;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
+}
+
+.quiz-option.correct {
+  border-color: #10b981 !important;
+  background-color: #ecfdf5 !important;
+  color: #065f46 !important;
+}
+
+.quiz-option.wrong {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
+}
+
+/* Animaciones */
+@keyframes popIn {
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-pop {
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.6)); }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+/* Estilo para los botones de Reino en el Explorador */
+.realm-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+.realm-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.12);
+}
+.realm-card.active {
+  ring: 3px solid #4f46e5;
+  border-color: #4f46e5;
+}
+
+/* Tablas didácticas */
+.table-pedagogic {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+.table-pedagogic th {
+  background-color: #f8fafc;
+  padding: 0.75rem 1rem;
+  font-weight: 800;
+  color: #334155;
+  border-bottom: 2px solid #e2e8f0;
+}
+.table-pedagogic td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+.table-pedagogic tr:last-child td {
+  border-bottom: none;
+}
+
+/* Scrollbar amigable */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* =============================================================================
+   ESTILOS DE IMPRESIÓN (DIPLOMA Y CHULETA)
+   ============================================================================= */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print, header, nav, footer, .btn-bounce {
+    display: none !important;
+  }
+  main.app-main {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .card-playful {
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    break-inside: avoid;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
