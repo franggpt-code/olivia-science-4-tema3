@@ -437,7 +437,7 @@ class ScienceApp {
   }
 
   // ===========================================================================
-  // VISTA 3: SIMULADOR DE EXAMEN (Prueba A y B)
+  // VISTA 3: SIMULADOR DE EXAMEN (Prueba A y B con Rellenar Palabras y Escritura)
   // ===========================================================================
   startExam(examKey) {
     const examData = this.data.exams[examKey];
@@ -445,8 +445,16 @@ class ScienceApp {
 
     this.examState.activeExamId = examKey;
     this.examState.currentQuestionIndex = 0;
-    this.examState.answers = new Array(examData.questions.length).fill(null);
+    // Inicializar estado de respuestas según el tipo de pregunta
+    this.examState.answers = examData.questions.map(q => {
+      if (q.type === 'fill_blanks') return new Array(q.blanks.length).fill('');
+      if (q.type === 'classify_inputs') return new Array(q.items.length).fill('');
+      if (q.type === 'text_input') return new Array(q.inputs ? q.inputs.length : 1).fill('');
+      return null; // multiple_choice
+    });
     this.examState.finished = false;
+    this.activeBlankIndex = 0;
+    this.activeTextInputIndex = 0;
 
     const selectorView = document.getElementById("exam-selector");
     const activeView = document.getElementById("exam-active");
@@ -464,10 +472,127 @@ class ScienceApp {
     const qIndex = this.examState.currentQuestionIndex;
     const q = exam.questions[qIndex];
     const totalQ = exam.questions.length;
-    const currentSelected = this.examState.answers[qIndex];
+    const currentAns = this.examState.answers[qIndex];
 
     const container = document.getElementById("exam-question-card");
     if (!container) return;
+
+    let bodyHtml = "";
+
+    // 1. TIPO RELLENAR HUECOS (FILL BLANKS)
+    if (q.type === 'fill_blanks') {
+      let sentenceHtml = q.template;
+      q.blanks.forEach((b, bIdx) => {
+        const val = (Array.isArray(currentAns) && currentAns[bIdx]) ? currentAns[bIdx] : '';
+        const inputHtml = `<input type="text" id="blank-${bIdx}" data-blank-idx="${bIdx}" value="${val.replace(/"/g, '&quot;')}" placeholder="${b.placeholder || '...'}" oninput="app.recordBlankInput(${bIdx}, this.value)" onfocus="app.setActiveBlank(${bIdx})" class="blank-input ${val ? 'filled' : ''}" autocomplete="off" autocapitalize="none" spellcheck="false">`;
+        sentenceHtml = sentenceHtml.replace(`{${bIdx}}`, inputHtml);
+      });
+
+      const wordBankHtml = q.wordBank ? `
+        <div class="mt-6 p-4 rounded-2xl bg-indigo-50/80 border border-indigo-100">
+          <p class="text-xs font-black text-indigo-900 mb-2.5 flex items-center gap-1.5">
+            <span>💡</span> <span>Banco de palabras de ayuda (escribe o pulsa para rellenar en el hueco activo):</span>
+          </p>
+          <div class="flex flex-wrap gap-2">
+            ${q.wordBank.map(w => `
+              <button type="button" onclick="app.insertWordToBlank('${w.replace(/'/g, "\'")}')" class="word-bank-chip">
+                <span>✏️</span> <span>${w}</span>
+              </button>
+            `).join("")}
+          </div>
+        </div>
+      ` : '';
+
+      bodyHtml = `
+        <div class="space-y-4 mb-8">
+          <div class="p-5 sm:p-6 bg-slate-50/90 rounded-2xl border-2 border-indigo-100">
+            <p class="fill-sentence">${sentenceHtml}</p>
+          </div>
+          ${wordBankHtml}
+        </div>
+      `;
+    }
+    // 2. TIPO RESPUESTA ESCRITA (TEXT INPUT)
+    else if (q.type === 'text_input') {
+      const inputs = q.inputs || [{ label: "Tu respuesta", placeholder: q.placeholder || "Escribe aquí...", accepted: q.accepted }];
+
+      const inputsHtml = inputs.map((inp, iIdx) => {
+        const val = (Array.isArray(currentAns) && currentAns[iIdx]) ? currentAns[iIdx] : '';
+        return `
+          <div class="space-y-1.5">
+            <label class="block text-xs font-black uppercase tracking-wider text-slate-700">${inp.label}:</label>
+            <input type="text" id="text-input-${iIdx}" data-text-idx="${iIdx}" value="${val.replace(/"/g, '&quot;')}" placeholder="${inp.placeholder || 'Escribe tu respuesta...'}" oninput="app.recordTextInput(${iIdx}, this.value)" onfocus="app.setActiveTextInput(${iIdx})" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 text-slate-900 font-bold text-sm sm:text-base bg-white" autocomplete="off" autocapitalize="none" spellcheck="false">
+          </div>
+        `;
+      }).join("");
+
+      const wordBankHtml = q.wordBank ? `
+        <div class="mt-4 p-4 rounded-2xl bg-indigo-50/80 border border-indigo-100">
+          <p class="text-xs font-black text-indigo-900 mb-2.5 flex items-center gap-1.5">
+            <span>💡</span> <span>Palabras de ayuda:</span>
+          </p>
+          <div class="flex flex-wrap gap-2">
+            ${q.wordBank.map(w => `
+              <button type="button" onclick="app.insertWordToTextInput('${w.replace(/'/g, "\'")}')" class="word-bank-chip">
+                <span>✍️</span> <span>${w}</span>
+              </button>
+            `).join("")}
+          </div>
+        </div>
+      ` : '';
+
+      bodyHtml = `
+        <div class="space-y-4 mb-8">
+          <div class="p-5 sm:p-6 bg-slate-50/90 rounded-2xl border-2 border-indigo-100 space-y-4">
+            ${inputsHtml}
+          </div>
+          ${wordBankHtml}
+        </div>
+      `;
+    }
+    // 3. TIPO CLASIFICACIÓN ESCRITA (CLASSIFY INPUTS)
+    else if (q.type === 'classify_inputs') {
+      const itemsHtml = q.items.map((item, itemIdx) => {
+        const val = (Array.isArray(currentAns) && currentAns[itemIdx]) ? currentAns[itemIdx] : '';
+        const isUni = val.toLowerCase().includes('uni');
+        const isPluri = val.toLowerCase().includes('pluri');
+        return `
+          <div class="p-4 bg-white rounded-2xl border-2 border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-indigo-300 transition-colors">
+            <span class="text-sm sm:text-base font-bold text-slate-900 flex-1">${item.name}</span>
+            <div class="flex items-center gap-2">
+              <input type="text" id="classify-input-${itemIdx}" value="${val.replace(/"/g, '&quot;')}" placeholder="unicelular o pluricelular..." oninput="app.recordClassifyInput(${itemIdx}, this.value)" class="blank-input ${val ? 'filled' : ''} text-xs sm:text-sm !min-w-[150px]" autocomplete="off" autocapitalize="none" spellcheck="false">
+              <div class="flex items-center gap-1 shrink-0">
+                <button type="button" onclick="app.quickClassify(${itemIdx}, 'unicelular')" class="classify-btn ${isUni ? 'selected' : ''}">Unicelular</button>
+                <button type="button" onclick="app.quickClassify(${itemIdx}, 'pluricelular')" class="classify-btn ${isPluri ? 'selected' : ''}">Pluricelular</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      bodyHtml = `
+        <div class="space-y-3 mb-8">
+          ${itemsHtml}
+        </div>
+      `;
+    }
+    // 4. TIPO TEST ESTÁNDAR (MULTIPLE CHOICE)
+    else {
+      bodyHtml = `
+        <div class="space-y-3 mb-8">
+          ${q.options.map((opt, i) => `
+            <div onclick="app.recordExamAnswer(${i})" class="quiz-option p-4 flex items-center gap-3 text-sm sm:text-base font-semibold text-slate-800 ${currentAns === i ? 'selected' : ''}">
+              <span class="w-7 h-7 rounded-lg ${currentAns === i ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700'} font-black text-xs flex items-center justify-center shrink-0">
+                ${String.fromCharCode(65 + i)}
+              </span>
+              <span class="flex-1">${opt}</span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    const typeBadge = q.type === 'fill_blanks' ? '✍️ Rellenar palabras' : q.type === 'classify_inputs' ? '🔬 Clasificación' : q.type === 'text_input' ? '📝 Respuesta escrita' : '🎯 Razonamiento test';
 
     container.innerHTML = `
       <div class="p-6 sm:p-8 animate-pop">
@@ -477,7 +602,7 @@ class ScienceApp {
             <span class="text-xs font-black uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md">
               ${exam.title}
             </span>
-            <p class="text-xs text-slate-500 mt-1 font-semibold">${exam.context ? 'Caso práctico en la naturaleza' : 'Control Oficial de Evaluación'}</p>
+            <p class="text-xs text-slate-500 mt-1 font-semibold">${typeBadge} · Control Oficial de Evaluación</p>
           </div>
           <span class="text-sm font-black text-slate-700 bg-slate-100 px-3 py-1 rounded-full">
             Pregunta ${qIndex + 1} / ${totalQ}
@@ -488,21 +613,11 @@ class ScienceApp {
         <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug mb-3">
           ${q.question}
         </h3>
-        <button onclick="window.audioManager.speak('${q.question.replace(/'/g, "\\'")}')" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold mb-6 flex items-center gap-1">
+        <button onclick="window.audioManager.speak('${q.question.replace(/'/g, "\'")}')" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold mb-6 flex items-center gap-1">
           🗣️ Escuchar en voz alta
         </button>
 
-        <!-- Opciones -->
-        <div class="space-y-3 mb-8">
-          ${q.options.map((opt, i) => `
-            <div onclick="app.recordExamAnswer(${i})" class="quiz-option p-4 flex items-center gap-3 text-sm sm:text-base font-semibold text-slate-800 ${currentSelected === i ? 'selected' : ''}">
-              <span class="w-7 h-7 rounded-lg ${currentSelected === i ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700'} font-black text-xs flex items-center justify-center shrink-0">
-                ${String.fromCharCode(65 + i)}
-              </span>
-              <span class="flex-1">${opt}</span>
-            </div>
-          `).join("")}
-        </div>
+        ${bodyHtml}
 
         <!-- Controles de navegación de preguntas -->
         <div class="flex items-center justify-between pt-4 border-t border-slate-200">
@@ -528,8 +643,111 @@ class ScienceApp {
     }
   }
 
+  // Grabación de respuestas de examen
   recordExamAnswer(optionIndex) {
     this.examState.answers[this.examState.currentQuestionIndex] = optionIndex;
+    if (window.audioManager) window.audioManager.playClick();
+    this.renderExamQuestion();
+  }
+
+  recordBlankInput(blankIdx, value) {
+    const qIndex = this.examState.currentQuestionIndex;
+    const q = this.data.exams[this.examState.activeExamId].questions[qIndex];
+    if (!Array.isArray(this.examState.answers[qIndex])) {
+      this.examState.answers[qIndex] = new Array(q.blanks.length).fill('');
+    }
+    this.examState.answers[qIndex][blankIdx] = value;
+    const el = document.getElementById(`blank-${blankIdx}`);
+    if (el) {
+      if (value.trim()) el.classList.add('filled');
+      else el.classList.remove('filled');
+    }
+  }
+
+  setActiveBlank(blankIdx) {
+    this.activeBlankIndex = blankIdx;
+  }
+
+  insertWordToBlank(word) {
+    const qIndex = this.examState.currentQuestionIndex;
+    const q = this.data.exams[this.examState.activeExamId].questions[qIndex];
+    if (!q || q.type !== 'fill_blanks') return;
+
+    if (!Array.isArray(this.examState.answers[qIndex])) {
+      this.examState.answers[qIndex] = new Array(q.blanks.length).fill('');
+    }
+
+    let targetIdx = this.activeBlankIndex;
+    if (targetIdx === undefined || targetIdx === null || targetIdx < 0 || targetIdx >= q.blanks.length) {
+      targetIdx = this.examState.answers[qIndex].findIndex(val => !val || !val.trim());
+      if (targetIdx === -1) targetIdx = 0;
+    }
+
+    this.examState.answers[qIndex][targetIdx] = word;
+    const el = document.getElementById(`blank-${targetIdx}`);
+    if (el) {
+      el.value = word;
+      el.classList.add('filled');
+    }
+    if (window.audioManager) window.audioManager.playClick();
+
+    if (targetIdx + 1 < q.blanks.length) {
+      this.activeBlankIndex = targetIdx + 1;
+      const nextEl = document.getElementById(`blank-${targetIdx + 1}`);
+      if (nextEl) nextEl.focus();
+    }
+  }
+
+  recordTextInput(inputIdx, value) {
+    const qIndex = this.examState.currentQuestionIndex;
+    const q = this.data.exams[this.examState.activeExamId].questions[qIndex];
+    const len = q.inputs ? q.inputs.length : 1;
+    if (!Array.isArray(this.examState.answers[qIndex])) {
+      this.examState.answers[qIndex] = new Array(len).fill('');
+    }
+    this.examState.answers[qIndex][inputIdx] = value;
+  }
+
+  setActiveTextInput(inputIdx) {
+    this.activeTextInputIndex = inputIdx;
+  }
+
+  insertWordToTextInput(word) {
+    const qIndex = this.examState.currentQuestionIndex;
+    const q = this.data.exams[this.examState.activeExamId].questions[qIndex];
+    if (!q || q.type !== 'text_input') return;
+
+    const len = q.inputs ? q.inputs.length : 1;
+    if (!Array.isArray(this.examState.answers[qIndex])) {
+      this.examState.answers[qIndex] = new Array(len).fill('');
+    }
+
+    let targetIdx = this.activeTextInputIndex;
+    if (targetIdx === undefined || targetIdx === null || targetIdx < 0 || targetIdx >= len) {
+      targetIdx = this.examState.answers[qIndex].findIndex(val => !val || !val.trim());
+      if (targetIdx === -1) targetIdx = 0;
+    }
+
+    this.examState.answers[qIndex][targetIdx] = word;
+    const el = document.getElementById(`text-input-${targetIdx}`);
+    if (el) {
+      el.value = word;
+      el.focus();
+    }
+    if (window.audioManager) window.audioManager.playClick();
+  }
+
+  recordClassifyInput(itemIdx, value) {
+    const qIndex = this.examState.currentQuestionIndex;
+    const q = this.data.exams[this.examState.activeExamId].questions[qIndex];
+    if (!Array.isArray(this.examState.answers[qIndex])) {
+      this.examState.answers[qIndex] = new Array(q.items.length).fill('');
+    }
+    this.examState.answers[qIndex][itemIdx] = value;
+  }
+
+  quickClassify(itemIdx, typeValue) {
+    this.recordClassifyInput(itemIdx, typeValue);
     if (window.audioManager) window.audioManager.playClick();
     this.renderExamQuestion();
   }
@@ -538,6 +756,8 @@ class ScienceApp {
     const exam = this.data.exams[this.examState.activeExamId];
     if (this.examState.currentQuestionIndex < exam.questions.length - 1) {
       this.examState.currentQuestionIndex++;
+      this.activeBlankIndex = 0;
+      this.activeTextInputIndex = 0;
       this.renderExamQuestion();
     }
   }
@@ -545,26 +765,101 @@ class ScienceApp {
   prevExamQuestion() {
     if (this.examState.currentQuestionIndex > 0) {
       this.examState.currentQuestionIndex--;
+      this.activeBlankIndex = 0;
+      this.activeTextInputIndex = 0;
       this.renderExamQuestion();
     }
   }
 
+  // Normalizador de texto para corrección inteligente y tolerante (sin tildes, mayúsculas o signos)
+  normalizeAnswerText(str) {
+    if (!str || typeof str !== 'string') return '';
+    return str
+      .toLowerCase()
+      .trim()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[.,;:¿?¡!]/g, "")
+      .replace(/\s+/g, " ");
+  }
+
+  // Verificador universal de respuestas para cualquier tipo de pregunta
+  checkQuestionCorrectness(q, userAns) {
+    if (userAns === undefined || userAns === null) {
+      return { isOk: false, scoreRatio: 0, details: [] };
+    }
+
+    if (q.type === 'fill_blanks') {
+      if (!Array.isArray(userAns)) return { isOk: false, scoreRatio: 0, details: [] };
+      let correctBlanks = 0;
+      const details = q.blanks.map((b, bIdx) => {
+        const val = this.normalizeAnswerText(userAns[bIdx] || '');
+        const match = b.accepted.some(acc => this.normalizeAnswerText(acc) === val);
+        if (match) correctBlanks++;
+        return { user: userAns[bIdx] || '', expected: b.accepted[0], isOk: match };
+      });
+      const ratio = q.blanks.length > 0 ? (correctBlanks / q.blanks.length) : 0;
+      return { isOk: ratio === 1, scoreRatio: ratio, details };
+    }
+
+    if (q.type === 'classify_inputs') {
+      if (!Array.isArray(userAns)) return { isOk: false, scoreRatio: 0, details: [] };
+      let correctItems = 0;
+      const details = q.items.map((item, itIdx) => {
+        const val = this.normalizeAnswerText(userAns[itIdx] || '');
+        const match = item.accepted.some(acc => this.normalizeAnswerText(acc) === val);
+        if (match) correctItems++;
+        return { name: item.name, user: userAns[itIdx] || '', expected: item.accepted[0], isOk: match };
+      });
+      const ratio = q.items.length > 0 ? (correctItems / q.items.length) : 0;
+      return { isOk: ratio === 1, scoreRatio: ratio, details };
+    }
+
+    if (q.type === 'text_input') {
+      const inputs = q.inputs || [{ label: "Respuesta", accepted: q.accepted }];
+      if (!Array.isArray(userAns)) {
+        const val = this.normalizeAnswerText(userAns || '');
+        const match = inputs[0].accepted.some(acc => this.normalizeAnswerText(acc) === val);
+        return { isOk: match, scoreRatio: match ? 1 : 0, details: [{ label: inputs[0].label, user: userAns || '', expected: inputs[0].accepted[0], isOk: match }] };
+      }
+      let correctInputs = 0;
+      const details = inputs.map((inp, iIdx) => {
+        const val = this.normalizeAnswerText(userAns[iIdx] || '');
+        const match = inp.accepted.some(acc => this.normalizeAnswerText(acc) === val);
+        if (match) correctInputs++;
+        return { label: inp.label, user: userAns[iIdx] || '', expected: inp.accepted[0], isOk: match };
+      });
+      const ratio = inputs.length > 0 ? (correctInputs / inputs.length) : 0;
+      return { isOk: ratio === 1, scoreRatio: ratio, details };
+    }
+
+    // multiple_choice
+    const isOk = (userAns === q.correct);
+    return { isOk, scoreRatio: isOk ? 1 : 0, details: [] };
+  }
+
   finishExam() {
     const exam = this.data.exams[this.examState.activeExamId];
-    let correctCount = 0;
+    let totalScore = 0;
+    let perfectCount = 0;
+
     exam.questions.forEach((q, idx) => {
-      if (this.examState.answers[idx] === q.correct) correctCount++;
+      const res = this.checkQuestionCorrectness(q, this.examState.answers[idx]);
+      totalScore += res.scoreRatio;
+      if (res.isOk) perfectCount++;
     });
 
-    const grade = ((correctCount / exam.questions.length) * 10).toFixed(1);
+    const grade = ((totalScore / exam.questions.length) * 10).toFixed(1);
     this.examState.lastScore = Number(grade);
 
-    if (correctCount >= 8) {
+    if (totalScore >= 7.5) {
       this.addStars(10);
       if (window.confetti) {
         window.confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
       }
       if (window.audioManager) window.audioManager.playCelebration();
+    } else {
+      if (window.audioManager) window.audioManager.playWrong();
     }
 
     const activeView = document.getElementById("exam-active");
@@ -594,7 +889,7 @@ class ScienceApp {
           </h2>
           <div class="text-5xl font-black text-indigo-600 my-4">${grade} <span class="text-2xl text-slate-400">/ 10</span></div>
           <p class="text-sm text-slate-600">
-            Has respondido correctamente a <strong>${correctCount} de ${exam.questions.length}</strong> preguntas oficiales.
+            Has completado las <strong>${exam.questions.length} preguntas</strong> oficiales combinando rellenar palabras, respuestas escritas y razonamiento.
           </p>
         </div>
 
@@ -603,22 +898,72 @@ class ScienceApp {
           <h4 class="font-black text-slate-800 text-base">🔍 Desglose Formativo Detallado:</h4>
           ${exam.questions.map((q, idx) => {
             const userAns = this.examState.answers[idx];
-            const isOk = (userAns === q.correct);
-            return `
-              <div class="p-4 rounded-xl border ${isOk ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200'}">
-                <div class="flex items-start justify-between gap-2 mb-2">
-                  <span class="font-bold text-xs uppercase ${isOk ? 'text-emerald-700' : 'text-rose-700'}">
-                    Pregunta ${idx + 1} · ${isOk ? '✅ Acierto' : '❌ Para Repasar'}
-                  </span>
-                  <span class="text-xs font-bold text-slate-500">Correcta: Opción ${String.fromCharCode(65 + q.correct)}</span>
+            const check = this.checkQuestionCorrectness(q, userAns);
+            const isOk = check.isOk;
+
+            let answerSummaryHtml = "";
+
+            if (q.type === 'fill_blanks') {
+              let sentenceResult = q.template;
+              q.blanks.forEach((b, bIdx) => {
+                const d = check.details[bIdx] || { isOk: false, user: '', expected: b.accepted[0] };
+                const badge = d.isOk
+                  ? `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-black inline-block my-0.5">${d.user} ✅</span>`
+                  : `<span class="bg-rose-100 text-rose-800 px-2 py-0.5 rounded-md font-bold line-through inline-block my-0.5">${d.user || 'vacío'} ❌</span> <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-black inline-block my-0.5">[Correcto: ${d.expected}]</span>`;
+                sentenceResult = sentenceResult.replace(`{${bIdx}}`, badge);
+              });
+              answerSummaryHtml = `
+                <div class="p-3 bg-white rounded-xl border border-slate-200 text-xs sm:text-sm leading-relaxed mb-2">
+                  <p class="font-medium text-slate-800 leading-loose">${sentenceResult}</p>
                 </div>
-                <p class="text-sm font-black text-slate-900 mb-2">${q.question}</p>
+              `;
+            } else if (q.type === 'classify_inputs') {
+              answerSummaryHtml = `
+                <div class="space-y-1.5 mb-2">
+                  ${check.details.map(d => `
+                    <div class="flex items-center justify-between text-xs p-2 rounded-lg ${d.isOk ? 'bg-emerald-50 text-emerald-900 border border-emerald-200' : 'bg-rose-50 text-rose-900 border border-rose-200'}">
+                      <span class="font-bold">${d.name}:</span>
+                      <span>${d.isOk ? `<strong>${d.user}</strong> ✅` : `<span class="line-through">${d.user || 'vacío'}</span> ❌ · Correcto: <strong>${d.expected}</strong>`}</span>
+                    </div>
+                  `).join("")}
+                </div>
+              `;
+            } else if (q.type === 'text_input') {
+              answerSummaryHtml = `
+                <div class="space-y-1.5 mb-2">
+                  ${check.details.map(d => `
+                    <div class="flex items-center justify-between text-xs p-2 rounded-lg ${d.isOk ? 'bg-emerald-50 text-emerald-900 border border-emerald-200' : 'bg-rose-50 text-rose-900 border border-rose-200'}">
+                      <span class="font-bold">${d.label || 'Término'}:</span>
+                      <span>${d.isOk ? `<strong>${d.user}</strong> ✅` : `<span class="line-through">${d.user || 'vacío'}</span> ❌ · Correcto: <strong>${d.expected}</strong>`}</span>
+                    </div>
+                  `).join("")}
+                </div>
+              `;
+            } else {
+              answerSummaryHtml = `
                 <div class="text-xs text-slate-700 mb-2">
-                  <p><strong>Tu respuesta:</strong> ${userAns !== null ? q.options[userAns] : '<em>No respondida</em>'}</p>
+                  <p><strong>Tu respuesta:</strong> ${userAns !== null ? q.options[userAns] : '<em>No respondida</em>'} ${isOk ? '✅' : '❌'}</p>
                   ${!isOk ? `<p class="text-emerald-700 font-bold mt-1"><strong>Respuesta correcta:</strong> ${q.options[q.correct]}</p>` : ''}
                 </div>
+              `;
+            }
+
+            const statusBadge = isOk 
+              ? `<span class="font-bold text-xs uppercase text-emerald-700">Pregunta ${idx + 1} · ✅ Acierto Total (1 pto)</span>`
+              : check.scoreRatio > 0 
+                ? `<span class="font-bold text-xs uppercase text-amber-700">Pregunta ${idx + 1} · ⚠️ Acierto Parcial (${(check.scoreRatio).toFixed(1)} ptos)</span>`
+                : `<span class="font-bold text-xs uppercase text-rose-700">Pregunta ${idx + 1} · ❌ Para Repasar</span>`;
+
+            return `
+              <div class="p-4 rounded-xl border ${isOk ? 'bg-emerald-50/50 border-emerald-200' : check.scoreRatio > 0 ? 'bg-amber-50/50 border-amber-200' : 'bg-rose-50/50 border-rose-200'}">
+                <div class="flex items-start justify-between gap-2 mb-2">
+                  ${statusBadge}
+                  <span class="text-xs font-bold text-slate-500">${q.type === 'fill_blanks' ? 'Rellenar huecos' : q.type === 'classify_inputs' ? 'Clasificación' : q.type === 'text_input' ? 'Escritura' : 'Test'}</span>
+                </div>
+                <p class="text-sm font-black text-slate-900 mb-2">${q.question}</p>
+                ${answerSummaryHtml}
                 <div class="bg-white p-3 rounded-lg border border-slate-200 text-xs text-slate-600">
-                  <strong>Explicación:</strong> ${q.explanation}
+                  <strong>💡 Explicación pedagógica:</strong> ${q.explanation}
                 </div>
               </div>
             `;
@@ -653,7 +998,7 @@ class ScienceApp {
     if (resultsView) resultsView.classList.add("hidden");
   }
 
-  // ===========================================================================
+  // // ===========================================================================
   // VISTA 4: DESAFÍO EXPRESS (TEST INFINITO)
   // ===========================================================================
   startNextExpress() {

@@ -372,269 +372,271 @@ const SCIENCE_DATA = {
 
   // ===========================================================================
   // SIMULADOR DE EXAMEN
+    // ===========================================================================
+  // SIMULADOR DE EXAMEN (PRUEBA A Y B CON RELLENAR PALABRAS Y TIPOS ESCRITOS)
+  // Basado estrictamente en las pág. 16 a 19 del control oficial de Santillana
   // ===========================================================================
   exams: {
-    // PRUEBA A: Caso práctico contextualizado (Lucas y Valentina en el Humedal)
+    // PRUEBA A: Caso práctico contextualizado (Lucas y Valentina en el Humedal y el Pinar)
     testA: {
       title: "Prueba A: La Gran Expedición al Humedal y el Pinar",
-      description: "Acompaña a Lucas y Valentina en su jornada científica con cuaderno de campo, prismáticos y microscopio.",
-      context: "Lucas y Valentina están pasando el día en una reserva natural que combina laguna de agua dulce y bosque de pinos. Llevan prismáticos para aves, lupas para el suelo y botes estériles para recoger agua y examinarla en el laboratorio del centro de visitantes.",
+      description: "Acompaña a Lucas y Valentina con su cuaderno de campo: preguntas de rellenar palabras, escribir términos y razonamiento práctico.",
+      context: "Lucas y Valentina están explorando una reserva natural que combina laguna de agua dulce y bosque de pinos. Llevan prismáticos para aves, lupas para el suelo y botes para recoger agua y examinarla en el microscopio.",
       questions: [
         {
           id: "ta_1",
-          question: "Lucas y Valentina ven una bandada de flamencos y garzas comiendo en el centro de la laguna. ¿Qué instrumento deben usar para observarlas con detalle sin espantarlas?",
-          options: [
-            "Una lupa de aumento.",
-            "Un microscopio de campo.",
-            "Unos prismáticos.",
-            "Un periscopio sumergible."
+          type: "fill_blanks",
+          question: "Lucas y Valentina llevan diferentes herramientas en sus mochilas. Rellena los huecos con el instrumento científico adecuado para cada observación:",
+          template: "Para observar aves acuáticas a gran distancia en la laguna usan los {0}. Para ver el detalle de los filamentos del musgo y el pie de una seta usan la {1}. Y en el centro de interpretación, para descubrir las células de una gota de agua usan el {2}.",
+          blanks: [
+            { placeholder: "instrumento...", accepted: ["prismáticos", "prismaticos", "los prismáticos"] },
+            { placeholder: "instrumento...", accepted: ["lupa", "la lupa"] },
+            { placeholder: "instrumento...", accepted: ["microscopio", "el microscopio"] }
           ],
-          correct: 2,
-          explanation: "Los prismáticos permiten observar animales lejanos a gran distancia con total nitidez y sin perturbarlos."
+          wordBank: ["prismáticos", "lupa", "microscopio", "telescopio", "termómetro", "periscopio"],
+          explanation: "Los prismáticos se usan para animales lejanos; la lupa para ver detalles pequeños sobre el terreno; y el microscopio para seres unicelulares y células invisibles a simple vista."
         },
         {
           id: "ta_2",
-          question: "¿A qué reino de la vida pertenecen los flamencos, peces y ranas que observan en la laguna?",
-          options: [
-            "Al reino de las plantas.",
-            "Al reino animal.",
-            "Al reino protoctistas.",
-            "Al reino de los hongos."
+          type: "text_input",
+          question: "Lucas anota en su cuaderno de campo los seres vivos que divisa con sus prismáticos: un águila imperial sobre un pino y juncos en la orilla de la laguna. Escribe a qué reino pertenece cada uno:",
+          inputs: [
+            { label: "Águila imperial", placeholder: "Escribe el reino...", accepted: ["animal", "animales", "reino animal"] },
+            { label: "Pino piñonero y Juncos", placeholder: "Escribe el reino...", accepted: ["plantas", "planta", "vegetal", "vegetales", "reino vegetal", "reino plantas", "reino de las plantas"] }
           ],
-          correct: 1,
-          explanation: "Son pluricelulares, se alimentan de otros seres vivos y se desplazan activamente: son animales."
+          wordBank: ["Animal", "Plantas", "Hongos", "Protoctistas", "Bacterias"],
+          explanation: "El águila imperial pertenece al reino animal (pluricelular, se desplaza y es heterótrofa). Los pinos y juncos pertenecen al reino de las plantas (pluricelulares y fotosintéticas)."
         },
         {
           id: "ta_3",
-          question: "Valentina toma una muestra de agua verdosa con un frasco y la coloca bajo el microscopio. Observa seres diminutos que se mueven rápido y otros verdes que flotan. ¿Qué ha encontrado?",
-          options: [
-            "Pequeños peces recién nacidos y hojas de pino.",
-            "Protozoos (como paramecios) y algas unicelulares microscópicas (del reino protoctistas).",
-            "Crías de rana y semillas flotantes.",
-            "Cristales de sal marina y granos de arena."
+          type: "fill_blanks",
+          question: "Valentina toma una muestra de agua estancada y la examina al microscopio. Completa los dos tipos de microorganismos del reino protoctistas que ha localizado:",
+          template: "Ha observado seres diminutos que se desplazan rápido llamados {0} y microalgas verdes flotantes. Ambos grupos pertenecen al reino de los {1}.",
+          blanks: [
+            { placeholder: "microorganismo...", accepted: ["protozoos", "protozoo", "paramecios", "amebas"] },
+            { placeholder: "reino...", accepted: ["protoctistas", "protoctista", "reino protoctistas"] }
           ],
-          correct: 1,
-          explanation: "En una gota de agua estancada habitan infinidad de protoctistas microscópicos (protozoos y microalgas)."
+          wordBank: ["protozoos", "protoctistas", "bacterias", "hongos", "animales", "células"],
+          explanation: "En una gota de agua de charca habitan protozoos (heterótrofos que se desplazan) y algas microscópicas (autótrofas). Ambos forman el reino protoctistas."
         },
         {
           id: "ta_4",
-          question: "Caminando por el pinar, Lucas encuentra varias setas creciendo en la base de un pino caído y dice: '¡Qué plantas tan curiosas!'. ¿Por qué la afirmación de Lucas es incorrecta?",
+          type: "multiple_choice",
+          question: "En el pinar, Lucas encuentra setas creciendo sobre madera caída y dice: '¡Qué plantas tan curiosas!'. ¿Por qué las setas NO pertenecen al reino de las plantas?",
           options: [
-            "Porque las setas son animales venenosos que muerden.",
-            "Porque las setas pertenecen al reino de los hongos: no tienen hojas ni clorofila y no hacen fotosíntesis.",
-            "Porque las setas son minerales que crecen con la lluvia.",
-            "Porque las setas no tienen agua en su interior."
+            "Porque pertenecen al reino de los hongos: carecen de clorofila, no realizan fotosíntesis y se nutren de restos orgánicos.",
+            "Porque las setas tienen huesos duros y se desplazan con patas como los escarabajos.",
+            "Porque las setas son minerales creados directamente por la lluvia.",
+            "Porque las setas son animales venenosos que muerden a los árboles."
           ],
-          correct: 1,
-          explanation: "Los hongos no son plantas porque son heterótrofos (se nutren de materia orgánica en descomposición) y carecen de clorofila."
+          correct: 0,
+          explanation: "Los hongos no son plantas porque no tienen clorofila ni hojas y no fabrican su propio alimento; son heterótrofos descomponedores."
         },
         {
           id: "ta_5",
-          question: "Valentina usa su lupa de mano para examinar la parte inferior del sombrero de una seta. ¿Qué estructuras busca y para qué sirven?",
-          options: [
-            "Pequeñas flores microscópicas para dar fruto.",
-            "Láminas o poros donde se forman las esporas para reproducirse.",
-            "Pelos absorbentes que beben agua de la lluvia.",
-            "Dientes diminutos para morder insectos."
+          type: "text_input",
+          question: "Valentina le explica a Lucas que en el reino de los hongos existen seres que JAMÁS podrán ver con la lupa porque son unicelulares. ¿Cómo se llaman estos hongos microscópicos?",
+          inputs: [
+            { label: "Hongos microscópicos unicelulares", placeholder: "Escribe el nombre...", accepted: ["levaduras", "levadura", "las levaduras"] }
           ],
-          correct: 1,
-          explanation: "Bajo el sombrero de la seta se forman millones de esporas, que al volar por el viento formarán nuevos hongos."
+          wordBank: ["levaduras", "mohos", "setas", "líquenes", "bacterias"],
+          explanation: "Las levaduras son hongos unicelulares y microscópicos (a diferencia de los mohos y de los hongos que forman setas, que son pluricelulares)."
         },
         {
           id: "ta_6",
-          question: "Para merendar, los dos exploradores abren sus mochilas: Lucas come un bocadillo de jamón con pan crujiente y Valentina toma un yogur con fruta. ¿Qué seres vivos intervinieron en la elaboración de estos alimentos?",
-          options: [
-            "Para el pan se usaron algas marinas y para el yogur protozoos.",
-            "Para el pan se usaron levaduras (hongos) y para el yogur bacterias lácticas.",
-            "Para ambos se utilizaron hojas de plantas aromáticas.",
-            "Ninguno de los dos requiere la intervención de seres vivos."
+          type: "fill_blanks",
+          question: "Para comer a mediodía, Lucas tiene un bocadillo de pan crujiente y Valentina toma un yogur natural. Completa qué microorganismos hicieron posible estos alimentos:",
+          template: "Para hacer fermentar la masa del pan del bocadillo se emplearon {0} (del reino de los hongos). Para transformar la leche en yogur fermentado se emplearon {1} (del reino de las bacterias).",
+          blanks: [
+            { placeholder: "microorganismo del pan...", accepted: ["levaduras", "levadura", "las levaduras"] },
+            { placeholder: "microorganismo del yogur...", accepted: ["bacterias", "bacteria", "las bacterias", "lactobacilos"] }
           ],
-          correct: 1,
-          explanation: "¡Pregunta clásica de examen! El pan fermenta con levaduras (hongos unicelulares) y el yogur cuaja gracias a bacterias."
+          wordBank: ["levaduras", "bacterias", "protozoos", "algas", "plantas", "virus"],
+          explanation: "El pan se elabora mediante levaduras (hongos unicelulares que desprenden gas al fermentar), y el yogur se elabora gracias a bacterias beneficiosas que fermentan la leche."
         },
         {
           id: "ta_7",
-          question: "En un tronco viejo observan una capa blanquecina de moho y madera que se desmorona como tierra fértil. ¿Por qué es positivo esto para el ecosistema del pinar?",
-          options: [
-            "Porque los hongos y bacterias descomponen la madera y reciclan nutrientes minerales que las plantas aprovecharán.",
-            "Porque así el tronco no molesta para que los coches pasen.",
-            "Porque el moho elimina el aire del bosque para que no haya viento.",
-            "Porque las setas queman el tronco con ácido concentrado."
+          type: "text_input",
+          question: "Existe un reino de seres vivos sumamente diminutos que está presente en todas partes de la expedición (en el aire, en el agua de la charca, en el suelo e incluso en la piel) y que no ven a simple vista. ¿Cuál es?",
+          inputs: [
+            { label: "Nombre del reino", placeholder: "Escribe el reino...", accepted: ["bacterias", "bacteria", "reino bacterias", "reino de las bacterias", "moneras", "móneras"] }
           ],
-          correct: 0,
-          explanation: "Son los recicladores de la biosfera: devuelven la materia orgánica al suelo en forma de sales minerales nutritivas."
+          wordBank: ["Bacterias", "Protoctistas", "Hongos", "Animales", "Plantas"],
+          explanation: "El reino de las bacterias reúne a los seres vivos más abundantes y extendidos de la Tierra. Todos son unicelulares y microscópicos."
         },
         {
           id: "ta_8",
-          question: "Al cruzar un arroyo, Lucas se raspa la espinilla con una rama seca. La monitora le lava la herida con agua y jabón y le aplica un desinfectante. ¿Por qué es importante este paso?",
-          options: [
-            "Para evitar que bacterias patógenas del entorno entren en la piel y provoquen una infección.",
-            "Para cambiar el color de la piel a rojo brillante.",
-            "Para enfriar los huesos de la pierna.",
-            "Para que las plantas del bosque no huelan la sangre."
+          type: "classify_inputs",
+          question: "Clasifica los seres vivos observados durante la expedición escribiendo 'unicelular' o 'pluricelular':",
+          items: [
+            { name: "Pino piñonero de 15 metros de altura en el bosque", placeholder: "unicelular o pluricelular...", accepted: ["pluricelular", "pluricelulares"] },
+            { name: "Paramecio que nada en la gota de agua de la laguna", placeholder: "unicelular o pluricelular...", accepted: ["unicelular", "unicelulares"] },
+            { name: "Bacteria beneficiosa que fermentó el yogur", placeholder: "unicelular o pluricelular...", accepted: ["unicelular", "unicelulares"] }
           ],
-          correct: 0,
-          explanation: "La piel nos protege; cuando se corta, desinfectar impide que bacterias patógenas penetren y se multipliquen."
+          explanation: "El pino está formado por millones de células organizadas (pluricelular). Los paramecios (protozoos) y las bacterias constan de una única célula completa (unicelulares)."
         },
         {
           id: "ta_9",
-          question: "En la orilla de una cala cercana observan lechugas de mar (algas verdes) y grandes algas pardas. ¿En qué se diferencian estas algas de los pinos del bosque?",
-          options: [
-            "Las algas comen peces vivos y los pinos solo comen tierra.",
-            "Las algas viven en el agua y no tienen raíces, tallos, hojas verdaderas ni flores como los pinos.",
-            "Los pinos hacen la fotosíntesis pero las algas marinas no pueden hacerla.",
-            "Las algas no tienen células vivas."
+          type: "fill_blanks",
+          question: "En el cartel del parque natural recomiendan lavarse siempre las manos antes de comer. Completa la explicación biológica:",
+          template: "Es fundamental lavarse las manos porque en el agua estancada y el suelo pueden habitar {0} o {1} perjudiciales que causarían infecciones si entran en el aparato digestivo.",
+          blanks: [
+            { placeholder: "microorganismos 1...", accepted: ["bacterias", "bacteria"] },
+            { placeholder: "microorganismos 2...", accepted: ["protozoos", "protozoo", "hongos", "microbios", "parásitos", "parasitos"] }
           ],
-          correct: 1,
-          explanation: "Aunque ambas hacen fotosíntesis, las algas tienen una estructura sencilla sin órganos vegetales diferenciados (sin raíz ni tallo)."
+          wordBank: ["bacterias", "protozoos", "algas", "plantas", "células"],
+          explanation: "Lavarse las manos elimina bacterias y protozoos patógenos presentes en el medio natural que podrían causarnos enfermedades digestivas."
         },
         {
           id: "ta_10",
-          question: "Al final del día, Valentina repasa su libreta con todos los seres vivos identificados: garzas, pinos, níscalos, amebas y bacterias lácticas. ¿Cuál de estos grupos está formado ÚNICAMENTE por organismos unicelulares?",
+          type: "multiple_choice",
+          question: "Al regresar a casa, Valentina resume en su diario la gran lección biológica: ¿Qué tienen en común TODOS los seres vivos de los cinco reinos?",
           options: [
-            "Los hongos.",
-            "Las plantas.",
-            "Los animales.",
-            "Las bacterias."
+            "Todos están formados por una o más células y realizan las tres funciones vitales: nutrición, relación y reproducción.",
+            "Todos tienen plumas y respiran bajo el agua.",
+            "Todos fabrican su alimento gracias a la luz del sol.",
+            "Todos tienen patas para desplazarse y hojas verdes."
           ],
-          correct: 3,
-          explanation: "El reino de las bacterias es el único donde TODOS sus miembros son exclusivamente unicelulares."
+          correct: 0,
+          explanation: "Todos los seres vivos comparten la unidad celular (una o muchas) y llevan a cabo las tres funciones vitales de la vida: nutrición, relación y reproducción."
         }
       ]
     },
 
-    // PRUEBA B: Control Oficial de Conceptos Clave (Rigor Curricular Santillana)
+    // PRUEBA B: Control Curricular de Saberes Básicos (Estándar Oficial de Evaluación)
     testB: {
       title: "Prueba B: Dominio Curricular y Saberes Básicos",
-      description: "Evaluación formal con preguntas conceptuales y preguntas trampa de examen oficial de 4.º de Primaria.",
-      context: "Pon a prueba tus conocimientos sobre definiciones científicas, semejanzas y diferencias entre reinos y características biológicas fundamentales.",
+      description: "Evaluación oficial formal: ejercicios de rellenar texto, clasificar celularidad y nombrar los reinos con rigor científico.",
+      context: "Demuestra tu dominio conceptual de los seres vivos completando definiciones exactas, escribiendo términos y clasificando organismos.",
       questions: [
         {
           id: "tb_1",
-          question: "¿Qué afirmación describe de forma COMPLETA y EXACTA a los seres vivos y sus células?",
-          options: [
-            "Todos los seres vivos están formados por células; según su número se clasifican en unicelulares (una sola célula) y pluricelulares (muchas células).",
-            "Solo los animales grandes tienen células, las plantas están hechas de madera compacta.",
-            "Los seres unicelulares tienen diez células y pueden verse fácilmente a simple vista.",
-            "Las células son minerales inertes que no realizan funciones vitales."
+          type: "fill_blanks",
+          question: "1. Completa el siguiente texto fundamental sobre los seres vivos y sus células rellenando las palabras que faltan:",
+          template: "Todos los seres vivos están formados por partes sumamente pequeñas denominadas {0}. Según su número, los clasificamos en {1} y {2}. Los unicelulares están formados por una sola célula y únicamente se pueden ver con un {3}, y los pluricelulares están formados por un gran número de células y la mayoría de ellos {4} verse a simple vista.",
+          blanks: [
+            { placeholder: "palabra...", accepted: ["células", "célula", "celulas", "celula"] },
+            { placeholder: "palabra...", accepted: ["unicelulares", "unicelular"] },
+            { placeholder: "palabra...", accepted: ["pluricelulares", "pluricelular"] },
+            { placeholder: "instrumento...", accepted: ["microscopio", "el microscopio"] },
+            { placeholder: "palabra...", accepted: ["pueden", "se pueden", "logran", "suelen"] }
           ],
-          correct: 0,
-          explanation: "Definición curricular exacta: la célula es la unidad de vida y divide a los seres en unicelulares o pluricelulares."
+          wordBank: ["células", "unicelulares", "pluricelulares", "microscopio", "pueden", "tejidos", "lupa"],
+          explanation: "Ejercicio oficial de examen: los seres vivos están formados por células. Según su número son unicelulares (1 célula, microscopio) o pluricelulares (muchas células, se pueden ver a simple vista)."
         },
         {
           id: "tb_2",
-          question: "¿Cuáles son los cinco reinos en los que la ciencia clasifica a los seres vivos?",
-          options: [
-            "Vertebrados, Invertebrados, Árboles, Arbustos y Hierbas.",
-            "Reino Animal, Reino de las Plantas, Reino de los Hongos, Reino Protoctistas y Reino de las Bacterias.",
-            "Carnívoros, Herbívoros, Omnívoros, Descomponedores y Parásitos.",
-            "Reino del Aire, de la Tierra, del Agua Dulce, del Mar y Subterráneo."
+          type: "text_input",
+          question: "2. Para estudiar a los seres vivos los clasificamos en cinco reinos. Escribe el nombre de los 5 reinos de la naturaleza:",
+          inputs: [
+            { label: "Reino 1", placeholder: "Nombre del reino...", accepted: ["animales", "animal", "reino animal"] },
+            { label: "Reino 2", placeholder: "Nombre del reino...", accepted: ["plantas", "planta", "vegetales", "vegetal", "reino plantas", "reino vegetal", "reino de las plantas"] },
+            { label: "Reino 3", placeholder: "Nombre del reino...", accepted: ["hongos", "hongo", "fungi", "reino hongos"] },
+            { label: "Reino 4", placeholder: "Nombre del reino...", accepted: ["protoctistas", "protoctista", "reino protoctistas"] },
+            { label: "Reino 5", placeholder: "Nombre del reino...", accepted: ["bacterias", "bacteria", "moneras", "móneras", "reino bacterias"] }
           ],
-          correct: 1,
-          explanation: "Los cinco reinos fundamentales de la naturaleza son: Animales, Plantas, Hongos, Protoctistas y Bacterias."
+          wordBank: ["Animales", "Plantas", "Hongos", "Protoctistas", "Bacterias", "Invertebrados", "Minerales"],
+          explanation: "Los cinco reinos fundamentales de la naturaleza son: Animales, Plantas (Vegetales), Hongos, Protoctistas y Bacterias."
         },
         {
           id: "tb_3",
-          question: "Compara el Reino Animal y el Reino Vegetal: ¿En qué se PARECEN y en qué se DIFERENCIAN?",
-          options: [
-            "Se parecen en que ambos se desplazan; se diferencian en que los animales tienen hojas verdes.",
-            "Se parecen en que ambos son pluricelulares; se diferencian en que las plantas fabrican su alimento y están fijas, y los animales toman alimento y se desplazan.",
-            "No tienen ningún parecido biológico porque las plantas no son seres vivos.",
-            "Se parecen en que ambos hacen la fotosíntesis y se diferencian en el número de patas."
+          type: "fill_blanks",
+          question: "3. Fíjate en el reino de los animales y el de las plantas. Completa en qué se parecen y en qué se diferencian:",
+          template: "En qué se parecen: Ambos reinos están formados por seres vivos {0}. En qué se diferencian: Las plantas fabrican su propio alimento mediante la {1} y viven {2} al suelo, mientras que los animales se alimentan de {3} y pueden {4}.",
+          blanks: [
+            { placeholder: "semejanza...", accepted: ["pluricelulares", "pluricelular"] },
+            { placeholder: "proceso...", accepted: ["fotosíntesis", "fotosintesis"] },
+            { placeholder: "posición...", accepted: ["fijas", "fijadas", "sujetas", "inmóviles", "inmoviles"] },
+            { placeholder: "nutrición...", accepted: ["otros seres vivos", "otros seres", "otros animales", "alimento", "plantas y animales"] },
+            { placeholder: "movilidad...", accepted: ["desplazarse", "moverse", "trasladarse"] }
           ],
-          correct: 1,
-          explanation: "Semejanza: ambos son pluricelulares. Diferencia: nutrición autótrofa vs heterótrofa y movilidad activa vs fijos."
+          wordBank: ["pluricelulares", "fotosíntesis", "fijas", "otros seres vivos", "desplazarse", "volar", "unicelulares"],
+          explanation: "Semejanza: ambos son pluricelulares. Diferencias: las plantas hacen la fotosíntesis y viven fijas; los animales ingieren alimento de otros seres vivos y se desplazan."
         },
         {
           id: "tb_4",
-          question: "Indica qué tipos de hongos son UNICELULARES y cuáles son PLURICELULARES:",
-          options: [
-            "Las setas son unicelulares y las levaduras son pluricelulares.",
-            "Las levaduras son unicelulares; los mohos y los hongos que forman setas son pluricelulares.",
-            "Todos los hongos son pluricelulares sin excepción.",
-            "Todos los hongos son unicelulares y microscópicos."
+          type: "classify_inputs",
+          question: "4. ¿Qué tipos de hongos son, unicelulares o pluricelulares? Escribe la clasificación de cada uno:",
+          items: [
+            { name: "Levaduras (utilizadas para fermentar el pan)", placeholder: "unicelular o pluricelular...", accepted: ["unicelular", "unicelulares"] },
+            { name: "Mohos (que crecen sobre el pan o la fruta húmeda)", placeholder: "unicelular o pluricelular...", accepted: ["pluricelular", "pluricelulares"] },
+            { name: "Setas (como los champiñones y níscalos)", placeholder: "unicelular o pluricelular...", accepted: ["pluricelular", "pluricelulares"] }
           ],
-          correct: 1,
-          explanation: "¡Pregunta clave! Las levaduras son unicelulares microscópicas; los mohos y setas son pluricelulares."
+          explanation: "¡Pregunta clave del examen oficial! Las levaduras son unicelulares. Los mohos y los hongos que forman setas son pluricelulares."
         },
         {
           id: "tb_5",
-          question: "¿Qué parte de algunos hongos pluricelulares interviene directamente en su reproducción?",
-          options: [
-            "La raíz leñosa subterránea.",
-            "La seta, donde se producen y liberan las esporas.",
-            "Los pétalos de colores vivos.",
-            "El peciolo de sus hojas verdes."
+          type: "text_input",
+          question: "5. ¿Qué parte de algunos hongos pluricelulares aparece en otoño y tiene como función intervenir en su reproducción?",
+          inputs: [
+            { label: "Parte reproductora del hongo", placeholder: "Escribe el nombre...", accepted: ["la seta", "seta", "setas", "el cuerpo fructífero", "cuerpo fructífero"] },
+            { label: "Células reproductoras que libera al aire", placeholder: "Escribe el nombre...", accepted: ["esporas", "espora", "las esporas"] }
           ],
-          correct: 1,
-          explanation: "La seta es el órgano reproductor del hongo; en sus láminas se fabrican las esporas reproductoras."
+          wordBank: ["la seta", "esporas", "raíz", "semillas", "polen"],
+          explanation: "La seta es el órgano reproductor exterior de ciertos hongos; en sus láminas produce millones de esporas que se dispersan con el viento."
         },
         {
           id: "tb_6",
-          question: "Los hongos son muy importantes para las personas y para la naturaleza. Señala el ejemplo VERDADERO:",
-          options: [
-            "Para las personas dan antibióticos (penicilina) y alimento (setas, pan); para las plantas reciclan nutrientes en el suelo.",
-            "Para las personas sirven para fabricar cemento y para las plantas son las encargadas de polinizar sus flores.",
-            "Los hongos no aportan ningún beneficio y solo causan venenos.",
-            "Los hongos producen gasolina vegetal para los tractores agrícolas."
+          type: "fill_blanks",
+          question: "6. Los hongos son muy importantes para otros seres vivos. Rellena los huecos con ejemplos de su utilidad:",
+          template: "Para las personas: Las levaduras se emplean para elaborar el {0} y ciertos mohos permitieron obtener medicamentos antibióticos como la {1}. Para las plantas: Los hongos descomponen restos de hojas y madera muerta en el suelo, aportando sales y {2} esenciales para las raíces.",
+          blanks: [
+            { placeholder: "alimento...", accepted: ["pan", "el pan"] },
+            { placeholder: "medicamento...", accepted: ["penicilina", "la penicilina"] },
+            { placeholder: "nutrición vegetal...", accepted: ["minerales", "nutrientes", "sales minerales", "humus"] }
           ],
-          correct: 0,
-          explanation: "Beneficio doble: antibióticos y gastronomía para nosotros, y abono orgánico reciclado para el suelo fértil."
+          wordBank: ["pan", "penicilina", "minerales", "clorofila", "vacunas", "flores"],
+          explanation: "Para personas: pan (levaduras) y penicilina (moho). Para plantas: descomponen la materia orgánica liberando minerales en el suelo."
         },
         {
           id: "tb_7",
-          question: "¿Qué dos tipos de seres vivos tan distintos forman el reino de los PROTOCTISTAS?",
-          options: [
-            "Los gusanos y los caracoles.",
-            "Los protozoos y las algas.",
-            "Las bacterias y los mohos.",
-            "Los líquenes y los musgos."
+          type: "text_input",
+          question: "7. Nombra los dos tipos de seres vivos que se encuentran dentro del reino de los protoctistas:",
+          inputs: [
+            { label: "Seres unicelulares heterótrofos (como amebas y paramecios)", placeholder: "Nombre del grupo...", accepted: ["protozoos", "protozoo", "los protozoos"] },
+            { label: "Seres fotosintéticos acuáticos (unicelulares o pluricelulares)", placeholder: "Nombre del grupo...", accepted: ["algas", "alga", "las algas"] }
           ],
-          correct: 1,
-          explanation: "El reino protoctistas reúne a los protozoos (heterótrofos) y a las algas (autótrofas fotosintéticas)."
+          wordBank: ["protozoos", "algas", "bacterias", "mohos", "levaduras"],
+          explanation: "El reino protoctistas está formado por dos grandes grupos: los protozoos (unicelulares que ingieren alimento) y las algas (que realizan la fotosíntesis)."
         },
         {
           id: "tb_8",
-          question: "Señala la afirmación FALSA sobre los protozoos:",
-          options: [
-            "Son seres vivos pluricelulares visibles a simple vista paseando por el bosque.",
-            "Viven en medios acuáticos o en ambientes muy húmedos.",
-            "Algunos protozoos, como las amebas, pueden causarnos enfermedades.",
-            "Se parecen a los animales en que se alimentan de otros seres vivos."
+          type: "text_input",
+          question: "8. En el examen hay una frase con un error: 'Los protozoos son seres vivos pluricelulares'. ¿Por qué palabra debemos cambiar 'pluricelulares' para que sea totalmente verdadera?",
+          inputs: [
+            { label: "Palabra correcta", placeholder: "Escribe la palabra...", accepted: ["unicelulares", "unicelular"] }
           ],
-          correct: 0,
-          explanation: "¡La falsa es la A! Los protozoos son UNICELULARES y microscópicos, jamás son pluricelulares gigantes."
+          explanation: "Los protozoos (como las amebas y paramecios) son SIEMPRE seres vivos unicelulares y microscópicos."
         },
         {
           id: "tb_9",
-          question: "Recuerda las características de las BACTERIAS y compáralas con los protozoos. ¿Qué tienen en común?",
-          options: [
-            "Ambos son pluricelulares y tienen flores.",
-            "Ambos son seres vivos unicelulares y microscópicos.",
-            "Ambos vuelan en el cielo nocturno.",
-            "Ambos son siempre de color verde fosforescente."
+          type: "fill_blanks",
+          question: "9. Recuerda las características de las bacterias y completa las frases:",
+          template: "Las bacterias comparten con los protozoos que ambas son seres {0} y microscópicos. Respecto a su función, comparten con los hongos que muchas son {1} (como las que producen yogur o descomponen restos) y otras son perjudiciales porque pueden provocar {2}.",
+          blanks: [
+            { placeholder: "celularidad...", accepted: ["unicelulares", "unicelular"] },
+            { placeholder: "efecto positivo...", accepted: ["beneficiosas", "buenas", "útiles", "beneficiosos"] },
+            { placeholder: "efecto negativo...", accepted: ["enfermedades", "infecciones", "daño"] }
           ],
-          correct: 1,
-          explanation: "Semejanza: tanto las bacterias como los protozoos son unicelulares y solo pueden verse con microscopio."
+          wordBank: ["unicelulares", "beneficiosas", "enfermedades", "pluricelulares", "fotosíntesis"],
+          explanation: "Bacterias y protozoos son unicelulares. Tanto bacterias como hongos tienen especies beneficiosas (alimentación, reciclaje orgánico) y especies patógenas que causan enfermedades."
         },
         {
           id: "tb_10",
-          question: "¿Qué beneficios y perjuicios comparten las BACTERIAS con los HONGOS respecto a las personas?",
-          options: [
-            "Ninguno, las bacterias y hongos son exactamente lo mismo.",
-            "Beneficio: ambos se emplean en la alimentación (yogur / pan y setas); perjuicio: ambos pueden causar enfermedades e infecciones.",
-            "Beneficio: ambos fabrican ropa de abrigo; perjuicio: ambos comen madera de muebles.",
-            "Beneficio: ambos hacen fotosíntesis; perjuicio: ambos se comen a las mascotas."
+          type: "fill_blanks",
+          question: "10. En una comida campestre tenemos pan y yogur. Completa qué seres vivos se emplean para elaborar cada uno:",
+          template: "Para elaborar el pan se emplean {0} (del reino de los hongos). Para elaborar el yogur se emplean {1} (del reino de las bacterias).",
+          blanks: [
+            { placeholder: "organismo del pan...", accepted: ["levaduras", "levadura", "las levaduras"] },
+            { placeholder: "organismo del yogur...", accepted: ["bacterias", "bacteria", "las bacterias", "lactobacilos"] }
           ],
-          correct: 1,
-          explanation: "Ambos reinos aportan alimentos fermentados esenciales para el ser humano y ambos cuentan con especies patógenas infecciosas."
+          wordBank: ["levaduras", "bacterias", "protozoos", "algas", "plantas"],
+          explanation: "El pan se fermenta con levaduras (hongos unicelulares) y el yogur se elabora con bacterias lácticas (reino bacterias)."
         }
       ]
     }
   },
 
-  // ===========================================================================
-  // BANCO DE DESAFÍO EXPRESS (TEST INFINITO RÁPIDO)
   // ===========================================================================
   expressQuestions: [
     {

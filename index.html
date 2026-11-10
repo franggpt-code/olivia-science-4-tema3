@@ -106,7 +106,7 @@
             Los Seres Vivos y los Cinco Reinos
           </h2>
           <p class="hero-p mb-6">
-            Entrena a fondo para el examen de Ciencias de la Naturaleza (Tema 3). Domina las células, los hongos, las algas, las bacterias y saca tu 10 oficial.
+            Entrena a fondo para el examen de Ciencias de la Naturaleza (Tema 3). Domina las células, los 5 reinos, los hongos y las bacterias con ejercicios de rellenar palabras y escribir como en el cole.
           </p>
 
           <div class="flex flex-wrap items-center gap-3">
@@ -114,7 +114,7 @@
               <span>Comenzar Misiones</span> <span>🚀</span>
             </button>
             <button onclick="app.navigate('examen')" class="btn-bounce hero-btn-secondary px-6 py-3 rounded-2xl text-sm">
-              <span>Simular Examen</span> <span>🏆</span>
+              <span>Simulador de Examen</span> <span>🏆</span>
             </button>
           </div>
         </div>
@@ -159,7 +159,7 @@
             🏆
           </div>
           <h3 class="text-lg font-black text-slate-900 mb-1 group-hover:text-emerald-600 transition-colors">Simulador de Examen</h3>
-          <p class="text-xs text-slate-500 leading-relaxed">Prueba A (Expedición Práctica en el Humedal) y Prueba B (Control Curricular con preguntas trampa).</p>
+          <p class="text-xs text-slate-500 leading-relaxed">Prueba A (Expedición Práctica) y Prueba B (Control Curricular con ejercicios de rellenar palabras, escribir y clasificar).</p>
         </div>
 
         <!-- Módulo 3: Desafío Express -->
@@ -229,7 +229,7 @@
       <div id="exam-selector" class="space-y-6">
         <div>
           <h2 class="text-2xl font-black text-slate-900">Simulador de Examen</h2>
-          <p class="text-xs sm:text-sm text-slate-500">Pruebas calibradas exactamente con los estándares del Proyecto CLAVES Grazalema-Santillana.</p>
+          <p class="text-xs sm:text-sm text-slate-500">Pruebas calibradas exactamente con los estándares del Proyecto CLAVES Grazalema-Santillana con ejercicios de rellenar palabras y escribir términos.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -238,16 +238,17 @@
           <div class="card-playful p-6 sm:p-8 border-t-8 border-indigo-600 flex flex-col justify-between">
             <div>
               <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-black bg-indigo-100 text-indigo-800 mb-3">
-                PRUEBA A · COMPETENCIAL
+                PRUEBA A · COMPETENCIAL Y ESCRITURA
               </span>
               <h3 class="text-xl font-black text-slate-900 mb-2">La Expedición al Humedal y el Pinar</h3>
               <p class="text-sm text-slate-600 leading-relaxed mb-6">
-                Acompaña a Lucas y Valentina en su expedición científica. Preguntas competenciales de aplicación práctica con muestras de agua, flamencos, setas del pinar, pan y yogur.
+                Acompaña a Lucas y Valentina en su expedición científica. Incluye ejercicios de rellenar instrumentos en el texto, escribir reinos, escribir protoctistas y clasificar seres vivos.
               </p>
               <ul class="text-xs text-slate-600 space-y-2 mb-6 font-semibold">
-                <li class="flex items-center gap-2">✅ 10 preguntas de situación real en la naturaleza</li>
-                <li class="flex items-center gap-2">✅ Identificación de instrumentos y reinos</li>
-                <li class="flex items-center gap-2">✅ Explicaciones pedagógicas al corregir</li>
+                <li class="flex items-center gap-2">✍️ Rellenar palabras en oraciones y escribir términos</li>
+                <li class="flex items-center gap-2">🔬 Clasificación escrita de unicelulares y pluricelulares</li>
+                <li class="flex items-center gap-2">💡 Banco de palabras interactivo de ayuda (teclear o pulsar)</li>
+                <li class="flex items-center gap-2">✅ Corrección formativa y puntuación parcial por hueco</li>
               </ul>
             </div>
             <button onclick="app.startExam('testA')" class="btn-bounce w-full py-3 rounded-2xl font-black text-sm text-white bg-indigo-600 hover:bg-indigo-700 shadow-md">
@@ -259,16 +260,17 @@
           <div class="card-playful p-6 sm:p-8 border-t-8 border-teal-600 flex flex-col justify-between">
             <div>
               <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-black bg-teal-100 text-teal-800 mb-3">
-                PRUEBA B · CONTROL CURRICULAR
+                PRUEBA B · CONTROL CURRICULAR OFICIAL
               </span>
               <h3 class="text-xl font-black text-slate-900 mb-2">Control Oficial de Conceptos Clave</h3>
               <p class="text-sm text-slate-600 leading-relaxed mb-6">
-                Evaluación formal de definiciones y preguntas trampa: diferencias exactas entre animales y plantas, celularidad de hongos y bacterias, y protoctistas.
+                Evaluación formal idéntica al examen en papel de Santillana: rellenar el texto completo de células, escribir los 5 reinos, clasificar hongos, y nombrar organismos del pan y del yogur.
               </p>
               <ul class="text-xs text-slate-600 space-y-2 mb-6 font-semibold">
-                <li class="flex items-center gap-2">✅ 10 preguntas conceptuales profundas</li>
-                <li class="flex items-center gap-2">✅ Detección de afirmaciones falsas</li>
-                <li class="flex items-center gap-2">✅ Certificado de Honor disponible al aprobar</li>
+                <li class="flex items-center gap-2">✍️ Ejercicio oficial de completar texto con 5 huecos de células</li>
+                <li class="flex items-center gap-2">📝 Escribir los 5 reinos y los dos grupos de protoctistas</li>
+                <li class="flex items-center gap-2">🍄 Clasificar levaduras, mohos y setas (unicelular / pluricelular)</li>
+                <li class="flex items-center gap-2">🏆 Certificado de Honor disponible con nota alta</li>
               </ul>
             </div>
             <button onclick="app.startExam('testB')" class="btn-bounce w-full py-3 rounded-2xl font-black text-sm text-white bg-teal-600 hover:bg-teal-700 shadow-md">

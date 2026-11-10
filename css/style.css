@@ -264,6 +264,93 @@ main.app-main {
 }
 
 /* =============================================================================
+   EJERCICIOS DE RELLENAR PALABRAS Y COMPLETAR HUECOS (ESTILO EXAMEN ESCRITO)
+   ============================================================================= */
+.fill-sentence {
+  font-size: 1.05rem;
+  line-height: 2.2;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.blank-input {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #312e81;
+  background-color: #ffffff;
+  border: 2px solid #a5b4fc;
+  border-radius: 0.75rem;
+  min-width: 130px;
+  max-width: 220px;
+  text-align: center;
+  transition: all 0.2s ease;
+  vertical-align: middle;
+  margin: 0.2rem 0.3rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.blank-input:focus {
+  background-color: #ffffff;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+  outline: none;
+}
+.blank-input.filled {
+  background-color: #f5f3ff;
+  border-color: #6366f1;
+}
+
+.word-bank-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.85rem;
+  background-color: #ffffff;
+  border: 2px solid #c7d2fe;
+  color: #3730a3;
+  border-radius: 9999px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+.word-bank-chip:hover {
+  background-color: #e0e7ff;
+  border-color: #818cf8;
+  transform: translateY(-2px);
+}
+.word-bank-chip:active {
+  transform: scale(0.95);
+}
+
+.classify-btn {
+  padding: 0.35rem 0.85rem;
+  border-radius: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  border: 2px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.classify-btn:hover {
+  border-color: #818cf8;
+  color: #3730a3;
+  background-color: #eef2ff;
+}
+.classify-btn.selected {
+  background-color: #4f46e5 !important;
+  color: #ffffff !important;
+  border-color: #4338ca !important;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+}
+
+/* =============================================================================
    ESTILOS DE IMPRESIÓN (DIPLOMA Y ESQUEMAS)
    ============================================================================= */
 @media print {
